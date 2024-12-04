@@ -1,1 +1,32 @@
+name: .NET Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET 8.0 SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0'
+
+    - name: Restore dependencies
+      run: dotnet restore ./CalculatorApp_vide/CalculatorApp.sln
+
+    - name: Build the solution
+      run: dotnet build ./CalculatorApp_vide/CalculatorApp.sln --configuration Release
+
+    - name: Run tests with NUnit
+      run: dotnet test ./CalculatorApp_vide/TestCalculApp/TestCalculApp.csproj --configuration Release
+
+    - name: Publish application (optional)
+      run: dotnet publish ./CalculatorApp_vide/CalculatorApp.csproj --configuration Release --output ./publish
 
